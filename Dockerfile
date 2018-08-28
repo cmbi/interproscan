@@ -30,8 +30,9 @@ RUN wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${INTERPROSCAN_VERSION}
     wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/${INTERPROSCAN_VERSION}/interproscan-${INTERPROSCAN_VERSION}-64-bit.tar.gz.md5 && \
     md5sum -c interproscan-${INTERPROSCAN_VERSION}-64-bit.tar.gz.md5
 
-RUN tar -pxvzf interproscan-${INTERPROSCAN_VERSION}-64-bit.tar.gz && rm interproscan-${INTERPROSCAN_VERSION}-64-bit.tar.gz && \
-    rm interproscan-${INTERPROSCAN_VERSION}-64-bit.tar.gz.md5 && mv interproscan-${INTERPROSCAN_VERSION} interproscan
+RUN tar -pxvzf interproscan-${INTERPROSCAN_VERSION}-64-bit.tar.gz && \
+    rm interproscan-${INTERPROSCAN_VERSION}-64-bit.tar.gz interproscan-${INTERPROSCAN_VERSION}-64-bit.tar.gz.md5 && \
+    mv interproscan-${INTERPROSCAN_VERSION} interproscan
 
 # Install panther
 WORKDIR /deps/interproscan/data
@@ -39,7 +40,7 @@ RUN wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/data/panther-data-${PAN
     wget ftp://ftp.ebi.ac.uk/pub/software/unix/iprscan/5/data/panther-data-${PANTHER_VERSION}.tar.gz.md5 && \
     md5sum -c panther-data-${PANTHER_VERSION}.tar.gz.md5
 
-RUN tar -pxvzf panther-data-${PANTHER_VERSION}.tar.gz && rm panther-data-${PANTHER_VERSION}.tar.gz.md5 && panther-data-${PANTHER_VERSION}.tar.gz
+RUN tar -pxvzf panther-data-${PANTHER_VERSION}.tar.gz && rm panther-data-${PANTHER_VERSION}.tar.gz.md5 panther-data-${PANTHER_VERSION}.tar.gz
 
 # Add to PATH variable
 ENV PATH="/deps/interproscan:${PATH}"
