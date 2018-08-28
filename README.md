@@ -12,6 +12,7 @@ Need to download the following: (for academic use only)
 # Installing
 Place the required archives in this directory with proper name.
 Then run:
+
     docker build -t interproscan .
     
 After this, you can refer to the image as 'interproscan'.
