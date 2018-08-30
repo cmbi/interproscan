@@ -5,6 +5,7 @@ ARG PANTHER_VERSION=11.1
 ARG SIGNALP_VERSION=4.1
 ARG TMHMM_VERSION=2.0
 ARG PHOBIUS_VERSION=1.01
+ARG BLAST_VERSION=2.6.0
 
 # Install supportive software
 RUN apt-get update && apt-get upgrade -y -q && apt-get install -y -q \
@@ -49,6 +50,7 @@ ENV PATH="/deps/interproscan:${PATH}"
 WORKDIR /deps/interproscan
 COPY signalp-${SIGNALP_VERSION}f.Linux.tar.gz /deps
 RUN tar -xzf /deps/signalp-${SIGNALP_VERSION}f.Linux.tar.gz -C /deps/interproscan/bin/signalp/${SIGNALP_VERSION} --strip-components 1
+RUN sed -i "s|\$ENV{SIGNALP} = '.*';|\$ENV{SIGNALP} = '/deps/interproscan/bin/signalp/${SIGNALP_VERSION}/';|" /deps/interproscan/bin/signalp/${SIGNALP_VERSION}/signalp
 
 # Install tmhmm
 WORKDIR /deps/interproscan
@@ -60,6 +62,12 @@ RUN  tar -xzf /deps/tmhmm-${TMHMM_VERSION}c.Linux.tar.gz -C /deps && \
 # Install phobius
 COPY phobius${PHOBIUS_VERSION}_linux.tar.gz /deps
 RUN  tar -xzf /deps/phobius${PHOBIUS_VERSION}_linux.tar.gz -C /deps/interproscan/bin/phobius/${PHOBIUS_VERSION} --strip-components 3
+
+# Overwrite rpsblast to overcome a dependency problem
+WORKDIR /deps/interproscan
+RUN wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${BLAST_VERSION}/ncbi-blast-${BLAST_VERSION}+-x64-linux.tar.gz
+RUN tar xvf ncbi-blast-${BLAST_VERSION}+-x64-linux.tar.gz
+RUN cp ncbi-blast-${BLAST_VERSION}+/bin/rpsblast /deps/interproscan/bin/blast/ncbi-blast-${BLAST_VERSION}+/rpsblast
 
 # Make directories that interproscan needs
 RUN mkdir /data
